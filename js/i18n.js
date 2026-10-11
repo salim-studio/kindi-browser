@@ -31,7 +31,7 @@ ar: {
   wmsTitle: "إضافة طبقة WMS/WMTS", wmsUrl: "رابط الخادم", wmsLayers: "اسم الطبقات", wmsAdd: "إضافة", wmsCancel: "إلغاء",
   wmsEx: "مثال: https://…/wms",
   detClose: "إغلاق", detMeta: "البيانات الوصفية الكاملة", detFoot: "البصمة (WKT)", detLinks: "الروابط",
-  detQuick: "معاينة سريعة", footer: "بيانات مفتوحة: Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  detQuick: "معاينة سريعة", footer: "© 2026 salim-slimani • بيانات مفتوحة: Copernicus / ESA • NASA GIBS • OpenStreetMap",
   noRes: "لا نتائج — وسّع التاريخ أو المنطقة.", errNet: "تعذّر الاتصال — عرض بيانات تجريبية.",
   km: "كم", ha: "هكتار", clearOk: "تم المسح", copied: "تم النسخ!",
   base: "الخريطة الأساسية", overlays: "التراكب",
@@ -40,7 +40,7 @@ ar: {
   timeline: "الخط الزمني", resultsStrip: "شريط النتائج", sheetTgl: "طي/فتح اللوحة", cmpHint: "عند تفعيل الانقسام تُخفى طبقة العرض والبصمات مؤقتاً لعرض نقي."
 },
 en: {
-  appTitle: "Kindi Browser", appSub: "Kindi Browser • Open Mission",
+  appTitle: "Kindi Browser", appSub: "Satellite Imagery Explorer • Open Mission",
   searchPh: "Search place… (Algiers, Oran…)", searchBtn: "Go",
   utc: "UTC", langLabel: "Language",
   tabSearch: "Search", tabVis: "Visualize", tabCmp: "Compare", tabAna: "Analyze", tabDld: "Download", tabHi: "Highlights",
@@ -70,7 +70,7 @@ en: {
   wmsTitle: "Add custom WMS/WMTS", wmsUrl: "Server URL", wmsLayers: "Layer names", wmsAdd: "Add", wmsCancel: "Cancel",
   wmsEx: "e.g. https://…/wms",
   detClose: "Close", detMeta: "Full metadata", detFoot: "Footprint (WKT)", detLinks: "Links",
-  detQuick: "Quicklook", footer: "Open data: Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  detQuick: "Quicklook", footer: "© 2026 salim-slimani • Open data: Copernicus / ESA • NASA GIBS • OpenStreetMap",
   noRes: "No results — widen dates or AOI.", errNet: "Connection failed — showing demo data.",
   km: "km", ha: "ha", clearOk: "Cleared", copied: "Copied!",
   base: "Base map", overlays: "Overlay",
@@ -79,7 +79,7 @@ en: {
   timeline: "Timeline", resultsStrip: "Results strip", sheetTgl: "Collapse/expand panel", cmpHint: "When split is on, the visualize layer and footprints are hidden for a crisp view."
 },
 fr: {
-  appTitle: "Kindi Browser", appSub: "Navigateur Kindi • Mission ouverte",
+  appTitle: "Kindi Browser", appSub: "Explorateur d'imagerie satellite • Mission ouverte",
   searchPh: "Chercher un lieu… (Alger, Oran…)", searchBtn: "OK",
   utc: "UTC", langLabel: "Langue",
   tabSearch: "Recherche", tabVis: "Visualiser", tabCmp: "Comparer", tabAna: "Analyser", tabDld: "Télécharger", tabHi: "À la une",
@@ -109,7 +109,7 @@ fr: {
   wmsTitle: "Ajouter WMS/WMTS", wmsUrl: "URL du serveur", wmsLayers: "Noms des couches", wmsAdd: "Ajouter", wmsCancel: "Annuler",
   wmsEx: "ex. https://…/wms",
   detClose: "Fermer", detMeta: "Métadonnées complètes", detFoot: "Empreinte (WKT)", detLinks: "Liens",
-  detQuick: "Aperçu", footer: "Données ouvertes : Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  detQuick: "Aperçu", footer: "© 2026 salim-slimani • Données ouvertes : Copernicus / ESA • NASA GIBS • OpenStreetMap",
   noRes: "Aucun résultat — élargissez dates ou zone.", errNet: "Connexion impossible — données démo affichées.",
   km: "km", ha: "ha", clearOk: "Effacé", copied: "Copié !",
   base: "Fond de carte", overlays: "Superposition",
@@ -117,10 +117,10 @@ fr: {
   levelAny: "Tous", filterChips: "Filtres rapides", chipS2: "S2 récent", chipLow: "Peu nuageux", chipS1: "SAR",
   timeline: "Chronologie", resultsStrip: "Bande de résultats", sheetTgl: "Replier/déplier le panneau", cmpHint: "Quand le partage est actif, la couche de visualisation et les empreintes sont masquées."
 }};
-let LANG = localStorage.getItem("dz-lang") || "ar";
+let LANG = localStorage.getItem("dz-lang") || "en";
 function t(k){ return (STR[LANG] && STR[LANG][k]) || STR.en[k] || k; }
 function setLang(l){
-  LANG = STR[l] ? l : "ar";
+  LANG = STR[l] ? l : "en";
   localStorage.setItem("dz-lang", LANG);
   document.documentElement.lang = LANG;
   document.documentElement.dir = (LANG === "ar") ? "rtl" : "ltr";

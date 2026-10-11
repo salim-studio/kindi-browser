@@ -1,6 +1,6 @@
-# Kindi Browser | متصفح الكندي
+# Kindi Browser — Satellite Imagery Explorer
 
-Arabic-first, no-build satellite imagery browser (inspired by the Copernicus Data Space Browser) for Algeria/MENA students & researchers. Vanilla HTML/CSS/JS + Leaflet. Double-click `index.html` and go.
+English-first, trilingual (EN/AR/FR) satellite imagery browser (inspired by the Copernicus Data Space Browser) for Algeria/MENA students & researchers. Vanilla HTML/CSS/JS + Leaflet. Double-click `index.html` and go.
 
 ## Run
 
@@ -40,3 +40,7 @@ Search (S1/S2/S3/S5P + cloud + AOI draw) → footprints + quicklooks → visuali
 - Analysis charts are **illustrative** (derived from quicklook seed), not scientific L2 products.
 - SAR VV/VH & DEM presets reuse VIIRS/NDVI tiles with distinct legends (no-key constraint).
 - Total JS ≈ 44 KB, commented in English, UI strings trilingual in `js/i18n.js`.
+
+---
+
+© 2026 salim-slimani. Open data: Copernicus / ESA • NASA GIBS • OpenStreetMap.
