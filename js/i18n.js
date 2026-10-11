@@ -1,0 +1,136 @@
+/* Kindi Browser i18n — AR / EN / FR. Default: ar */
+const STR = {
+ar: {
+  appTitle: "كندي براوزر", appSub: "متصفح الكندي • مهمة مفتوحة",
+  searchPh: "ابحث عن مكان… (الجزائر، وهران…)", searchBtn: "بحث",
+  utc: "التوقيت العالمي", langLabel: "اللغة",
+  tabSearch: "البحث", tabVis: "العرض", tabCmp: "المقارنة", tabAna: "التحليل", tabDld: "التحميل", tabHi: "أبرز",
+  mission: "المهمة", level: "مستوى المعالجة", from: "من", to: "إلى",
+  cloud: "الغطاء السحابي الأقصى", maxRes: "أقصى عدد للنتائج",
+  aoiNone: "لم يتم تحديد منطقة — سيُستخدم كامل الجزائر", aoiSet: "منطقة محددة جاهزة للبحث",
+  doSearch: "بحث في كتالوج الأقمار", searching: "جارٍ البحث…",
+  results: "النتائج", visualize: "عرض", meta: "تفاصيل", dl: "تحميل",
+  cloudShort: "سحب", date: "التاريخ", platform: "المنصة",
+  demoBadge: "وضع تجريبي", liveBadge: "بيانات حقيقية", apiOk: "متصل", apiDemo: "تجريبي", apiErr: "غير متصل",
+  visPreset: "الطبقة المسبقة", opacity: "الشفافية", legend: "مفتاح الخريطة",
+  pTrue: "ألوان حقيقية", pFalse: "ألوان كاذبة (NIR)", pNDVI: "مؤشر الغطاء النباتي NDVI",
+  pNDWI: "مؤشر المياه NDWI (تقريبي)", pSWIR: "الأشعة تحت الحمراء SWIR", pVV: "رادار SAR VV (تقريبي)", pVH: "رادار SAR VH (تقريبي)", pDEM: "نموذج الارتفاع DEM (تقريبي)",
+  cmpA: "الطبقة A", cmpB: "الطبقة B", cmpPos: "موضع الفاصل", splitMode: "وضع الانقسام", cmpOpacity: "شفافية B",
+  cmpDateB: "تاريخ الطبقة B", optTrue: "حقيقي", optFalse: "كاذب", optNdvi: "NDVI", optViirs: "VIIRS",
+  fmtLabel: "الصيغة", legendNote: "الطبقات المميزة بـ (تقريبي) مشتقة من صور GIBS البصرية للتوضيح فقط.",
+  anaH: "المدرج التكراري", anaS: "البصمة الطيفية", anaN: "إحصائيات NDVI", anaRun: "تشغيل التحليل",
+  anaNote: "تحليل توضيحي — قيم مشتقة من المعاينة لأغراض تعليمية.", anaNeed: "اختر منتجاً من النتائج أولاً.",
+  anaMean: "المتوسط", anaMin: "الأدنى", anaMax: "الأقصى", anaBand: "النطاق",
+  dldQueue: "قائمة التحميل", dldFmt: "الصيغة", dldCopy: "نسخ الروابط", dldEmpty: "لا عناصر بعد — أضف من نتائج البحث.",
+  dldStac: "نسخ STAC", dldOdata: "نسخ OData", dldOpen: "فتح الأصل",
+  hiTitle: "مواقع مميزة", hiGo: "انتقال",
+  tlFrom: "البداية", tlTo: "النهاية", tlPlay: "تشغيل", tlPause: "إيقاف", tlSpeed: "السرعة",
+  stCoords: "الإحداثيات", stZoom: "التكبير", stCount: "المنتجات", stApi: "الحالة",
+  tDrawRect: "رسم منطقة مستطيلة", tDrawPoly: "رسم مضلع", tMeasureD: "قياس مسافة", tMeasureA: "قياس مساحة",
+  tClear: "مسح", tLocate: "موقعي", tWms: "طبقة WMS مخصصة", tPlay: "تايم لابس", tFull: "ملء الشاشة",
+  wmsTitle: "إضافة طبقة WMS/WMTS", wmsUrl: "رابط الخادم", wmsLayers: "اسم الطبقات", wmsAdd: "إضافة", wmsCancel: "إلغاء",
+  wmsEx: "مثال: https://…/wms",
+  detClose: "إغلاق", detMeta: "البيانات الوصفية الكاملة", detFoot: "البصمة (WKT)", detLinks: "الروابط",
+  detQuick: "معاينة سريعة", footer: "بيانات مفتوحة: Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  noRes: "لا نتائج — وسّع التاريخ أو المنطقة.", errNet: "تعذّر الاتصال — عرض بيانات تجريبية.",
+  km: "كم", ha: "هكتار", clearOk: "تم المسح", copied: "تم النسخ!",
+  base: "الخريطة الأساسية", overlays: "التراكب",
+  bOSM: "OSM", bEsri: "صور Esri", bDark: "داكنة", bGibsT: "GIBS حقيقي", bGibsV: "GIBS VIIRS", bNdvi: "GIBS NDVI",
+  levelAny: "الكل", filterChips: "مرشحات سريعة", chipS2: "S2 حديث", chipLow: "سحب منخفضة", chipS1: "SAR",
+  timeline: "الخط الزمني", resultsStrip: "شريط النتائج", sheetTgl: "طي/فتح اللوحة", cmpHint: "عند تفعيل الانقسام تُخفى طبقة العرض والبصمات مؤقتاً لعرض نقي."
+},
+en: {
+  appTitle: "Kindi Browser", appSub: "Kindi Browser • Open Mission",
+  searchPh: "Search place… (Algiers, Oran…)", searchBtn: "Go",
+  utc: "UTC", langLabel: "Language",
+  tabSearch: "Search", tabVis: "Visualize", tabCmp: "Compare", tabAna: "Analyze", tabDld: "Download", tabHi: "Highlights",
+  mission: "Mission", level: "Processing level", from: "From", to: "To",
+  cloud: "Max cloud cover", maxRes: "Max results",
+  aoiNone: "No AOI — whole Algeria will be searched", aoiSet: "AOI ready for search",
+  doSearch: "Search satellite catalogue", searching: "Searching…",
+  results: "Results", visualize: "View", meta: "Meta", dl: "Get",
+  cloudShort: "cloud", date: "Date", platform: "Platform",
+  demoBadge: "Demo mode", liveBadge: "Live data", apiOk: "Online", apiDemo: "Demo", apiErr: "Offline",
+  visPreset: "Layer preset", opacity: "Opacity", legend: "Legend",
+  pTrue: "True Color", pFalse: "False Color (NIR)", pNDVI: "NDVI vegetation",
+  pNDWI: "NDWI water (approx.)", pSWIR: "SWIR infrared", pVV: "SAR VV (approx.)", pVH: "SAR VH (approx.)", pDEM: "Elevation DEM (approx.)",
+  cmpA: "Layer A", cmpB: "Layer B", cmpPos: "Divider position", splitMode: "Split mode", cmpOpacity: "B opacity",
+  cmpDateB: "Layer B date", optTrue: "True", optFalse: "False", optNdvi: "NDVI", optViirs: "VIIRS",
+  fmtLabel: "Format", legendNote: "Presets marked (approx.) are derived from GIBS optical imagery for illustration only.",
+  anaH: "Histogram", anaS: "Spectral signature", anaN: "NDVI stats", anaRun: "Run analysis",
+  anaNote: "Illustrative analysis — values derived from quicklook for education.", anaNeed: "Pick a product from results first.",
+  anaMean: "Mean", anaMin: "Min", anaMax: "Max", anaBand: "Band",
+  dldQueue: "Download queue", dldFmt: "Format", dldCopy: "Copy links", dldEmpty: "Empty — add items from search results.",
+  dldStac: "Copy STAC", dldOdata: "Copy OData", dldOpen: "Open original",
+  hiTitle: "Featured places", hiGo: "Fly to",
+  tlFrom: "Start", tlTo: "End", tlPlay: "Play", tlPause: "Pause", tlSpeed: "Speed",
+  stCoords: "Coords", stZoom: "Zoom", stCount: "Products", stApi: "Status",
+  tDrawRect: "Draw rectangle AOI", tDrawPoly: "Draw polygon", tMeasureD: "Measure distance", tMeasureA: "Measure area",
+  tClear: "Clear", tLocate: "Locate me", tWms: "Custom WMS layer", tPlay: "Timelapse", tFull: "Fullscreen",
+  wmsTitle: "Add custom WMS/WMTS", wmsUrl: "Server URL", wmsLayers: "Layer names", wmsAdd: "Add", wmsCancel: "Cancel",
+  wmsEx: "e.g. https://…/wms",
+  detClose: "Close", detMeta: "Full metadata", detFoot: "Footprint (WKT)", detLinks: "Links",
+  detQuick: "Quicklook", footer: "Open data: Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  noRes: "No results — widen dates or AOI.", errNet: "Connection failed — showing demo data.",
+  km: "km", ha: "ha", clearOk: "Cleared", copied: "Copied!",
+  base: "Base map", overlays: "Overlay",
+  bOSM: "OSM", bEsri: "Esri Imagery", bDark: "Dark", bGibsT: "GIBS True", bGibsV: "GIBS VIIRS", bNdvi: "GIBS NDVI",
+  levelAny: "All", filterChips: "Quick filters", chipS2: "Recent S2", chipLow: "Low cloud", chipS1: "SAR",
+  timeline: "Timeline", resultsStrip: "Results strip", sheetTgl: "Collapse/expand panel", cmpHint: "When split is on, the visualize layer and footprints are hidden for a crisp view."
+},
+fr: {
+  appTitle: "Kindi Browser", appSub: "Navigateur Kindi • Mission ouverte",
+  searchPh: "Chercher un lieu… (Alger, Oran…)", searchBtn: "OK",
+  utc: "UTC", langLabel: "Langue",
+  tabSearch: "Recherche", tabVis: "Visualiser", tabCmp: "Comparer", tabAna: "Analyser", tabDld: "Télécharger", tabHi: "À la une",
+  mission: "Mission", level: "Niveau de traitement", from: "Du", to: "Au",
+  cloud: "Couverture nuageuse max", maxRes: "Résultats max",
+  aoiNone: "Pas de zone — toute l'Algérie sera cherchée", aoiSet: "Zone prête pour la recherche",
+  doSearch: "Chercher dans le catalogue", searching: "Recherche…",
+  results: "Résultats", visualize: "Voir", meta: "Détails", dl: "Obtenir",
+  cloudShort: "nuages", date: "Date", platform: "Plateforme",
+  demoBadge: "Mode démo", liveBadge: "Données réelles", apiOk: "En ligne", apiDemo: "Démo", apiErr: "Hors ligne",
+  visPreset: "Préréglage", opacity: "Opacité", legend: "Légende",
+  pTrue: "Couleurs vraies", pFalse: "Fausses couleurs (NIR)", pNDVI: "NDVI végétation",
+  pNDWI: "NDWI eau (approx.)", pSWIR: "Infrarouge SWIR", pVV: "Radar SAR VV (approx.)", pVH: "Radar SAR VH (approx.)", pDEM: "Relief DEM (approx.)",
+  cmpA: "Couche A", cmpB: "Couche B", cmpPos: "Position du curseur", splitMode: "Mode partagé", cmpOpacity: "Opacité B",
+  cmpDateB: "Date de la couche B", optTrue: "Vraies", optFalse: "Fausses", optNdvi: "NDVI", optViirs: "VIIRS",
+  fmtLabel: "Format", legendNote: "Les préréglages (approx.) sont dérivés de l'imagerie optique GIBS, à but illustratif.",
+  anaH: "Histogramme", anaS: "Signature spectrale", anaN: "Stats NDVI", anaRun: "Lancer l'analyse",
+  anaNote: "Analyse illustrative — valeurs dérivées de l'aperçu à but pédagogique.", anaNeed: "Choisissez d'abord un produit.",
+  anaMean: "Moyenne", anaMin: "Min", anaMax: "Max", anaBand: "Bande",
+  dldQueue: "File de téléchargement", dldFmt: "Format", dldCopy: "Copier les liens", dldEmpty: "Vide — ajoutez depuis les résultats.",
+  dldStac: "Copier STAC", dldOdata: "Copier OData", dldOpen: "Ouvrir l'original",
+  hiTitle: "Lieux à la une", hiGo: "Y aller",
+  tlFrom: "Début", tlTo: "Fin", tlPlay: "Lecture", tlPause: "Pause", tlSpeed: "Vitesse",
+  stCoords: "Coords", stZoom: "Zoom", stCount: "Produits", stApi: "État",
+  tDrawRect: "Dessiner un rectangle", tDrawPoly: "Dessiner un polygone", tMeasureD: "Mesurer distance", tMeasureA: "Mesurer surface",
+  tClear: "Effacer", tLocate: "Me localiser", tWms: "Couche WMS perso", tPlay: "Timelapse", tFull: "Plein écran",
+  wmsTitle: "Ajouter WMS/WMTS", wmsUrl: "URL du serveur", wmsLayers: "Noms des couches", wmsAdd: "Ajouter", wmsCancel: "Annuler",
+  wmsEx: "ex. https://…/wms",
+  detClose: "Fermer", detMeta: "Métadonnées complètes", detFoot: "Empreinte (WKT)", detLinks: "Liens",
+  detQuick: "Aperçu", footer: "Données ouvertes : Copernicus / ESA • NASA GIBS • OpenStreetMap",
+  noRes: "Aucun résultat — élargissez dates ou zone.", errNet: "Connexion impossible — données démo affichées.",
+  km: "km", ha: "ha", clearOk: "Effacé", copied: "Copié !",
+  base: "Fond de carte", overlays: "Superposition",
+  bOSM: "OSM", bEsri: "Imagerie Esri", bDark: "Sombre", bGibsT: "GIBS vrai", bGibsV: "GIBS VIIRS", bNdvi: "GIBS NDVI",
+  levelAny: "Tous", filterChips: "Filtres rapides", chipS2: "S2 récent", chipLow: "Peu nuageux", chipS1: "SAR",
+  timeline: "Chronologie", resultsStrip: "Bande de résultats", sheetTgl: "Replier/déplier le panneau", cmpHint: "Quand le partage est actif, la couche de visualisation et les empreintes sont masquées."
+}};
+let LANG = localStorage.getItem("dz-lang") || "ar";
+function t(k){ return (STR[LANG] && STR[LANG][k]) || STR.en[k] || k; }
+function setLang(l){
+  LANG = STR[l] ? l : "ar";
+  localStorage.setItem("dz-lang", LANG);
+  document.documentElement.lang = LANG;
+  document.documentElement.dir = (LANG === "ar") ? "rtl" : "ltr";
+  document.querySelectorAll("[data-i18n]").forEach(el => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = t(el.dataset.i18nPh); });
+  document.querySelectorAll("[data-i18n-aria]").forEach(el => { el.setAttribute("aria-label", t(el.dataset.i18nAria)); });
+  document.querySelectorAll("[data-i18n-title]").forEach(el => { el.setAttribute("title", t(el.dataset.i18nTitle)); });
+  const utc = document.getElementById("utcClock"); if (utc) utc.textContent = new Date().toISOString().slice(11,19) + " UTC";
+  if (typeof renderHighlights === "function") renderHighlights();
+  if (typeof renderResults === "function" && typeof lastResults !== "undefined") renderResults(lastResults);
+  if (typeof refreshStatus === "function") refreshStatus();
+  document.querySelectorAll(".langbtn").forEach(b => b.classList.toggle("on", b.dataset.lang === LANG));
+}

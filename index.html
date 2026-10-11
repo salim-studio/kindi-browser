@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kindi Browser | متصفح الكندي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=Inter:wght@400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css">
+<link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+<div id="app">
+  <!-- TOP BAR -->
+  <header id="topbar">
+    <span class="logo" aria-hidden="true">🛰️</span>
+    <div class="brand"><b data-i18n="appTitle">كندي براوزر</b><small data-i18n="appSub">متصفح الكندي • مهمة مفتوحة</small></div>
+    <input id="geoQ" data-i18n-ph="searchPh" placeholder="ابحث عن مكان… (الجزائر، وهران…)" aria-label="search">
+    <button onclick="document.getElementById('geoQ').dispatchEvent(new Event('input'))" data-i18n="searchBtn" aria-label="go">بحث</button>
+    <div class="langs" role="group" aria-label="language">
+      <button class="langbtn" data-lang="ar" onclick="setLang('ar')">ع</button>
+      <button class="langbtn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="langbtn" data-lang="fr" onclick="setLang('fr')">FR</button>
+    </div>
+    <span id="utcClock" class="mono">--:--:-- UTC</span>
+  </header>
+  <div id="geoRes"></div>
+
+  <!-- LEFT PANEL -->
+  <aside id="leftPanel">
+    <button id="sheetHandle" onclick="toggleSheet()" data-i18n-aria="sheetTgl" aria-label="toggle panel">──</button>
+    <nav class="tabs" role="tablist">
+      <button class="tabbtn on" data-tab="search" onclick="switchTab('search')" data-i18n="tabSearch">البحث</button>
+      <button class="tabbtn" data-tab="vis" onclick="switchTab('vis')" data-i18n="tabVis">العرض</button>
+      <button class="tabbtn" data-tab="cmp" onclick="switchTab('cmp')" data-i18n="tabCmp">المقارنة</button>
+      <button class="tabbtn" data-tab="ana" onclick="switchTab('ana')" data-i18n="tabAna">التحليل</button>
+      <button class="tabbtn" data-tab="dld" onclick="switchTab('dld')" data-i18n="tabDld">التحميل</button>
+      <button class="tabbtn" data-tab="hi" onclick="switchTab('hi')" data-i18n="tabHi">أبرز</button>
+    </nav>
+    <div class="panels">
+      <!-- SEARCH -->
+      <section class="tabpanel on" id="panel-search">
+        <span class="badge demo" id="modeBadge">● <span id="modeBadgeTxt" data-i18n="demoBadge">وضع تجريبي</span></span>
+        <label class="microlab" data-i18n="mission">المهمة</label>
+        <select id="fMission" class="full">
+          <option value="S2">Sentinel-2 (optical)</option>
+          <option value="S1">Sentinel-1 (SAR)</option>
+          <option value="S3">Sentinel-3 (ocean/land)</option>
+          <option value="S5P">Sentinel-5P (atmosphere)</option>
+        </select>
+        <label class="microlab" data-i18n="level">مستوى المعالجة</label>
+        <select id="fLevel" class="full"><option value="ANY" data-i18n="levelAny">الكل</option><option>L1C</option><option>L2A</option><option>GRD</option></select>
+        <div class="grid2">
+          <div><label class="microlab" data-i18n="from">من</label><input type="date" id="fFrom" value="2024-01-01"></div>
+          <div><label class="microlab" data-i18n="to">إلى</label><input type="date" id="fTo" value="2024-03-01"></div>
+        </div>
+        <label class="microlab"><span data-i18n="cloud">الغطاء السحابي الأقصى</span> — <b id="cloudV" class="mono">40%</b></label>
+        <input type="range" id="fCloud" min="0" max="100" value="40" class="full" oninput="document.getElementById('cloudV').textContent=this.value+'%'">
+        <label class="microlab" data-i18n="maxRes">أقصى عدد للنتائج</label>
+        <select id="fTop" class="full"><option>10</option><option selected>20</option><option>50</option></select>
+        <div id="aoiState" data-i18n="aoiNone">لم يتم تحديد منطقة — سيُستخدم كامل الجزائر</div>
+        <label class="microlab" data-i18n="filterChips">مرشحات سريعة</label>
+        <div class="chips">
+          <button onclick="document.getElementById('fMission').value='S2';doSearch()">S2 · 2024</button>
+          <button onclick="document.getElementById('fCloud').value=10;document.getElementById('cloudV').textContent='10%';doSearch()" data-i18n="chipLow">سحب منخفضة</button>
+          <button onclick="document.getElementById('fMission').value='S1';doSearch()" data-i18n="chipS1">SAR</button>
+        </div>
+        <button id="searchBtn" class="full" onclick="doSearch()" data-i18n="doSearch">بحث في كتالوج الأقمار</button>
+        <label class="microlab"><span data-i18n="results">النتائج</span> (<span id="resCount" class="mono">0</span>)</label>
+        <div id="resList"><div class="empty" data-i18n="noRes">لا نتائج — وسّع التاريخ أو المنطقة.</div></div>
+      </section>
+      <!-- VISUALIZE -->
+      <section class="tabpanel" id="panel-vis">
+        <label class="microlab" data-i18n="visPreset">الطبقة المسبقة</label>
+        <select id="visPreset" class="full" onchange="setPreset(this.value)">
+          <option value="true" data-i18n="pTrue">ألوان حقيقية</option>
+          <option value="false" data-i18n="pFalse">ألوان كاذبة (NIR)</option>
+          <option value="ndvi" data-i18n="pNDVI">مؤشر الغطاء النباتي NDVI</option>
+          <option value="ndwi" data-i18n="pNDWI">مؤشر المياه NDWI</option>
+          <option value="swir" data-i18n="pSWIR">الأشعة تحت الحمراء SWIR</option>
+          <option value="vv" data-i18n="pVV">رادار SAR VV</option>
+          <option value="vh" data-i18n="pVH">رادار SAR VH</option>
+          <option value="dem" data-i18n="pDEM">نموذج الارتفاع DEM</option>
+        </select>
+        <label class="microlab"><span data-i18n="opacity">الشفافية</span> — <b id="visOpV" class="mono">85%</b></label>
+        <input type="range" id="visOp" min="0" max="100" value="85" class="full" oninput="document.getElementById('visOpV').textContent=this.value+'%';setPreset(currentPreset)">
+        <label class="microlab" data-i18n="legend">مفتاح الخريطة</label>
+        <div id="legendBar"></div><div id="legendLab" class="hint">True Color</div>
+        <div class="hint" data-i18n="legendNote">الطبقات المميزة بـ (تقريبي) مشتقة من صور GIBS البصرية للتوضيح فقط.</div>
+      </section>
+      <!-- COMPARE -->
+      <section class="tabpanel" id="panel-cmp">
+        <div class="hint" data-i18n="cmpHint">عند تفعيل الانقسام تُخفى طبقة العرض والبصمات مؤقتاً لعرض نقي.</div>
+        <div class="grid2">
+          <div><label class="microlab" data-i18n="cmpA">الطبقة A</label>
+            <select id="cmpA" class="full" onchange="setCompareLayer('A',this.value)">
+              <option value="trueColor" data-i18n="optTrue">حقيقي</option><option value="falseColor" data-i18n="optFalse">كاذب</option><option value="ndvi" data-i18n="optNdvi">NDVI</option><option value="viirs" data-i18n="optViirs">VIIRS</option>
+            </select></div>
+          <div><label class="microlab" data-i18n="cmpB">الطبقة B</label>
+            <select id="cmpB" class="full" onchange="setCompareLayer('B',this.value)">
+              <option value="viirs" data-i18n="optViirs">VIIRS</option><option value="trueColor" data-i18n="optTrue">حقيقي</option><option value="falseColor" data-i18n="optFalse">كاذب</option><option value="ndvi" data-i18n="optNdvi">NDVI</option>
+            </select></div>
+        </div>
+        <label class="microlab"><span data-i18n="cmpPos">موضع الفاصل</span> — <b id="cmpPosV" class="mono">50%</b></label>
+        <input type="range" id="cmpPos" min="0" max="100" value="50" class="full" oninput="applyCompare()">
+        <label style="display:flex;gap:.5rem;align-items:center;font-size:.8rem;margin-top:.5rem"><input type="checkbox" id="splitMode" onchange="applyCompare();if(this.checked)toast(t('cmpHint'))"> <span data-i18n="splitMode">وضع الانقسام</span></label>
+        <label class="microlab" data-i18n="cmpOpacity">شفافية B</label>
+        <input type="range" id="cmpOp" min="0" max="100" value="100" class="full" oninput="setCompareLayer('B',document.getElementById('cmpB').value)">
+        <label class="microlab" data-i18n="cmpDateB">تاريخ الطبقة B</label><input type="date" id="cmpDateB" class="full" onchange="setCompareLayer('B',document.getElementById('cmpB').value)">
+      </section>
+      <!-- ANALYZE -->
+      <section class="tabpanel" id="panel-ana">
+        <div id="anaHint" class="hint" data-i18n="anaNeed">اختر منتجاً من النتائج أولاً.</div>
+        <button class="full" onclick="runAnalysis()" data-i18n="anaRun" style="margin:.5rem 0">تشغيل التحليل</button>
+        <label class="microlab" data-i18n="anaH">المدرج التكراري</label><canvas class="chart" id="cvHist"></canvas>
+        <label class="microlab" data-i18n="anaS">البصمة الطيفية</label><canvas class="chart" id="cvSpec"></canvas>
+        <label class="microlab" data-i18n="anaN">إحصائيات NDVI</label>
+        <table class="meta" id="ndviTbl"><tr><td>—</td><td class="mono">—</td></tr></table>
+      </section>
+      <!-- DOWNLOAD -->
+      <section class="tabpanel" id="panel-dld">
+        <label class="microlab" data-i18n="dldQueue">قائمة التحميل</label>
+        <div id="dldList"><div class="empty" data-i18n="dldEmpty">لا عناصر بعد — أضف من نتائج البحث.</div></div>
+        <label class="microlab" data-i18n="dldFmt">الصيغة</label>
+        <select id="dldFmt" class="full"><option>JPEG</option><option>PNG</option><option>GeoTIFF-reference</option></select>
+        <div class="chips"><button onclick="copyTxt(queue.map(q=>q.odata).join('\n')||'—')" data-i18n="dldCopy">نسخ الروابط</button></div>
+      </section>
+      <!-- HIGHLIGHTS -->
+      <section class="tabpanel" id="panel-hi">
+        <label class="microlab" data-i18n="hiTitle">مواقع مميزة</label>
+        <div id="hiList"></div>
+      </section>
+    </div>
+  </aside>
+
+  <!-- MAP -->
+  <main id="mapWrap">
+    <div id="map"></div>
+    <div id="cmpDiv"></div>
+    <div id="quickPane"><span class="sat">🛰️</span></div>
+    <div class="basebar">
+      <button class="basebtn" data-base="osm" onclick="setBase('osm')" data-i18n="bOSM">OSM</button>
+      <button class="basebtn on" data-base="esri" onclick="setBase('esri')" data-i18n="bEsri">صور Esri</button>
+      <button class="basebtn" data-base="dark" onclick="setBase('dark')" data-i18n="bDark">داكنة</button>
+      <button class="basebtn" data-base="gibsT" onclick="setBase('gibsT')" data-i18n="bGibsT">GIBS حقيقي</button>
+      <button class="basebtn" data-base="gibsV" onclick="setBase('gibsV')" data-i18n="bGibsV">GIBS VIIRS</button>
+      <button class="basebtn" data-base="gibsN" onclick="setBase('gibsN')" data-i18n="bNdvi">GIBS NDVI</button>
+    </div>
+  </main>
+
+  <!-- RIGHT TOOLBAR -->
+  <aside id="rightBar">
+    <button onclick="startRect(this)" data-i18n-aria="tDrawRect" data-i18n-title="tDrawRect" aria-label="rect" title="AOI">▭</button>
+    <button onclick="startPoly(this)" data-i18n-aria="tDrawPoly" data-i18n-title="tDrawPoly" aria-label="poly" title="poly">⬠</button>
+    <button onclick="armTool(this,'d');toast('📏')" data-i18n-aria="tMeasureD" data-i18n-title="tMeasureD" aria-label="dist" title="dist">📏</button>
+    <button onclick="armTool(this,'a');toast('📐')" data-i18n-aria="tMeasureA" data-i18n-title="tMeasureA" aria-label="area" title="area">📐</button>
+    <button onclick="clearAll()" data-i18n-aria="tClear" data-i18n-title="tClear" aria-label="clear" title="clear">🧹</button>
+    <button onclick="locate()" data-i18n-aria="tLocate" data-i18n-title="tLocate" aria-label="locate" title="locate">📍</button>
+    <button onclick="openWms()" data-i18n-aria="tWms" data-i18n-title="tWms" aria-label="wms" title="WMS">🗺️</button>
+    <button onclick="playTL()" data-i18n-aria="tPlay" data-i18n-title="tPlay" aria-label="play" title="play">▶</button>
+    <button onclick="document.documentElement.requestFullscreen?.()" data-i18n-aria="tFull" data-i18n-title="tFull" aria-label="full" title="full">⛶</button>
+  </aside>
+
+  <!-- TIMELINE -->
+  <footer id="timeline">
+    <div class="tlrow">
+      <b style="font-size:.75rem" data-i18n="timeline">الخط الزمني</b>
+      <label class="mono" style="font-size:.7rem"><span data-i18n="tlFrom">البداية</span> <input type="date" id="tlFrom"></label>
+      <label class="mono" style="font-size:.7rem"><span data-i18n="tlTo">النهاية</span> <input type="date" id="tlTo"></label>
+      <button id="tlPlayBtn" onclick="playTL()">▶ <span data-i18n="tlPlay">تشغيل</span></button>
+      <label class="mono" style="font-size:.7rem"><span data-i18n="tlSpeed">السرعة</span> <input type="range" id="tlSpeed" min="1" max="6" value="3" style="width:90px"></label>
+      <span id="tlDate" class="mono">—</span>
+    </div>
+    <div id="resStrip"></div>
+  </footer>
+
+  <!-- STATUS -->
+  <div id="statusbar" class="mono">
+    <span><span data-i18n="stCoords">الإحداثيات</span>: <b id="stCoords">28.000, 2.500</b></span>
+    <span><span data-i18n="stZoom">التكبير</span>: <b id="stZoom">5</b></span>
+    <span><span data-i18n="stCount">المنتجات</span>: <b id="stCount">0</b></span>
+    <span><span data-i18n="stApi">الحالة</span>: <b id="stApi">…</b></span>
+    <span style="margin-inline-start:auto" data-i18n="footer">بيانات مفتوحة: Copernicus / ESA • NASA GIBS • OpenStreetMap</span>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="detailModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <h3 id="detName" class="mono" style="font-size:.85rem;word-break:break-all">—</h3>
+    <div id="detQL"></div>
+    <h4 data-i18n="detMeta">البيانات الوصفية الكاملة</h4>
+    <table class="meta" id="detTable"></table>
+    <h4 data-i18n="detFoot">البصمة (WKT)</h4>
+    <pre id="detWkt">—</pre>
+    <div id="detLinks"></div>
+    <p><button onclick="closeModal('detailModal')" data-i18n="detClose">إغلاق</button></p>
+  </div>
+</div>
+
+<!-- WMS MODAL -->
+<div class="modal" id="wmsModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <h3 data-i18n="wmsTitle">إضافة طبقة WMS/WMTS</h3>
+    <label class="microlab" data-i18n="wmsUrl">رابط الخادم</label>
+    <input id="wmsUrl" class="full mono" placeholder="https://…/wms" dir="ltr">
+    <label class="microlab" data-i18n="wmsLayers">اسم الطبقات</label>
+    <input id="wmsLayers" class="full mono" dir="ltr" placeholder="layer:name">
+    <p><button onclick="addWms()" data-i18n="wmsAdd">إضافة</button>
+    <button onclick="closeModal('wmsModal')" data-i18n="wmsCancel">إلغاء</button></p>
+  </div>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/api.js"></script>
+<script src="js/map.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
