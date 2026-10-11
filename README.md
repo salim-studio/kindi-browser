@@ -1,6 +1,15 @@
-# Kindi Browser — Satellite Imagery Explorer
+<p align="center">
+  <img src="assets/logo.svg" alt="Kindi Browser logo" width="120">
+</p>
 
-English-first, trilingual (EN/AR/FR) satellite imagery browser (inspired by the Copernicus Data Space Browser) for Algeria/MENA students & researchers. Vanilla HTML/CSS/JS + Leaflet. Double-click `index.html` and go.
+<h1 align="center">Kindi Browser — Satellite Imagery Explorer</h1>
+
+<p align="center">
+  English-first, trilingual (EN/AR/FR) satellite imagery browser (inspired by the Copernicus Data Space Browser) for Algeria/MENA students &amp; researchers.<br>
+  Vanilla HTML/CSS/JS + Leaflet. Double-click <code>index.html</code> and go.
+</p>
+
+![Kindi Browser cover](assets/cover.svg)
 
 ## Run
 

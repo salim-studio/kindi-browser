@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 480">
+  <defs>
+    <linearGradient id="cvBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0A1628"/>
+      <stop offset="1" stop-color="#060D1A"/>
+    </linearGradient>
+    <linearGradient id="cvKb" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#00C8FF"/>
+      <stop offset="1" stop-color="#00E5A0"/>
+    </linearGradient>
+    <radialGradient id="cvGlow" cx="0.78" cy="0.45" r="0.45">
+      <stop offset="0" stop-color="#00C8FF" stop-opacity="0.22"/>
+      <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="cvGrid" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" fill="none" stroke="#00C8FF" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="480" fill="url(#cvBg)"/>
+  <rect width="1280" height="480" fill="url(#cvGrid)"/>
+  <rect width="1280" height="480" fill="url(#cvGlow)"/>
+  <g fill="#E8F1FF" opacity="0.55">
+    <circle cx="90" cy="70" r="2.5"/><circle cx="220" cy="150" r="2"/><circle cx="420" cy="60" r="2.5"/>
+    <circle cx="560" cy="130" r="2"/><circle cx="700" cy="70" r="2.5"/><circle cx="60" cy="400" r="2"/>
+    <circle cx="330" cy="420" r="2.5"/><circle cx="520" cy="400" r="2"/><circle cx="880" cy="420" r="2"/>
+    <circle cx="1180" cy="90" r="2.5"/><circle cx="1080" cy="400" r="2"/>
+  </g>
+  <!-- orbit artwork -->
+  <ellipse cx="1020" cy="215" rx="205" ry="88" fill="none" stroke="url(#cvKb)" stroke-width="10" transform="rotate(-24 1020 215)"/>
+  <circle cx="1020" cy="215" r="78" fill="#0A1628" stroke="url(#cvKb)" stroke-width="10"/>
+  <circle cx="1020" cy="215" r="28" fill="url(#cvKb)"/>
+  <circle cx="1178" cy="128" r="22" fill="#00E5A0"/>
+  <circle cx="1178" cy="128" r="30" fill="none" stroke="#E8F1FF" stroke-opacity="0.4" stroke-width="2"/>
+  <!-- wordmark -->
+  <text x="80" y="130" font-family="Inter, Arial, sans-serif" font-size="30" letter-spacing="10" fill="#00C8FF">KINDI BROWSER</text>
+  <text x="76" y="225" font-family="Inter, Arial, sans-serif" font-size="84" font-weight="800" fill="#FFFFFF">Explore Satellite</text>
+  <text x="76" y="315" font-family="Inter, Arial, sans-serif" font-size="84" font-weight="800" fill="url(#cvKb)">Imagery</text>
+  <text x="80" y="365" font-family="Inter, Arial, sans-serif" font-size="26" fill="#8CA0B8">Search · Visualize · Compare · Analyze Sentinel missions — in English, Arabic and French.</text>
+  <text x="80" y="425" font-family="monospace" font-size="22" fill="#8CA0B8">Sentinel-1 · Sentinel-2 · Sentinel-3 · Sentinel-5P — © 2026 salim-slimani</text>
+</svg>

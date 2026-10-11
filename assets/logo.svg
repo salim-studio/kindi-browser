@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="kbLogo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#00C8FF"/>
+      <stop offset="1" stop-color="#00E5A0"/>
+    </linearGradient>
+    <radialGradient id="kbGlow" cx="0.5" cy="0.45" r="0.6">
+      <stop offset="0" stop-color="#00C8FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#00C8FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="#060D1A"/>
+  <rect x="6" y="6" width="244" height="244" rx="50" fill="none" stroke="url(#kbLogo)" stroke-width="5" opacity="0.85"/>
+  <rect width="256" height="256" rx="56" fill="url(#kbGlow)"/>
+  <g fill="#E8F1FF" opacity="0.7">
+    <circle cx="48" cy="52" r="2.4"/><circle cx="208" cy="46" r="2"/><circle cx="60" cy="206" r="2"/>
+    <circle cx="198" cy="208" r="2.4"/><circle cx="128" cy="36" r="1.8"/>
+  </g>
+  <ellipse cx="128" cy="128" rx="102" ry="42" fill="none" stroke="url(#kbLogo)" stroke-width="9" transform="rotate(-24 128 128)"/>
+  <circle cx="128" cy="128" r="38" fill="#0A1628" stroke="url(#kbLogo)" stroke-width="9"/>
+  <circle cx="128" cy="128" r="14" fill="url(#kbLogo)"/>
+  <circle cx="206" cy="82" r="12" fill="#00E5A0"/>
+  <circle cx="206" cy="82" r="12" fill="none" stroke="#E8F1FF" stroke-width="2" opacity="0.5"/>
+</svg>
