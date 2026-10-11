@@ -114,6 +114,11 @@ table.meta td:first-child{color:var(--mut);width:38%}
 .hpin .mut{color:var(--mut);font-size:.7rem}
 .qrow{display:flex;justify-content:space-between;gap:.5rem;font-size:.72rem;border:1px solid var(--line);border-radius:10px;padding:.4rem .6rem;margin:.35rem 0}
 .hint{color:var(--mut);font-size:.7rem}
+.lcbar{display:flex;height:16px;border-radius:8px;overflow:hidden;border:1px solid var(--line);margin-top:.4rem;background:#071224}
+.lcbar i{display:block;height:100%;min-width:2px}
+.lcleg{display:grid;grid-template-columns:1fr 1fr;gap:.25rem .6rem;font-size:.7rem;color:var(--mut);margin:.45rem 0}
+.lcleg b{color:var(--txt);font-weight:600}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:.35rem}
 
 /* modals */
 .modal{position:fixed;inset:0;z-index:2000;display:none;place-items:center;background:rgba(2,6,14,.7);backdrop-filter:blur(4px)}

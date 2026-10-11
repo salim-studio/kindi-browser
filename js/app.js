@@ -129,18 +129,79 @@ function closeModal(id) { document.getElementById(id)?.classList.remove("open");
 /* ---------- Analysis (hand-rolled canvas) ---------- */
 function seedOf(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
 function rnd(seed) { let x = seed || 1; return () => (x = (Math.imul(x, 1664525) + 1013904223) >>> 0) / 4294967296; }
+let lastAnalysis = null;
+function analysisTarget() {
+  if (selected) return { key: selected.id + "|" + selected.date, label: shortName(selected.name), date: (selected.date || "").slice(0, 10), cloud: selected.cloud, center: null };
+  const c = (typeof AOI_BOUNDS !== "undefined" && AOI_BOUNDS) ? AOI_BOUNDS.getCenter() : MAP.getCenter();
+  const d = document.getElementById("fTo")?.value || new Date().toISOString().slice(0, 10);
+  return { key: c.lat.toFixed(3) + "," + c.lng.toFixed(3) + "|" + d, label: t("anaView") + " · " + c.lat.toFixed(3) + ", " + c.lng.toFixed(3), date: d, cloud: null, center: { lat: c.lat, lng: c.lng } };
+}
+function analysisAreaHa(center) {
+  try {
+    if (typeof AOI_BOUNDS !== "undefined" && AOI_BOUNDS) {
+      const sw = AOI_BOUNDS.getSouthWest(), ne = AOI_BOUNDS.getNorthEast();
+      return approxAreaHa([{ lat: sw.lat, lng: sw.lng }, { lat: sw.lat, lng: ne.lng }, { lat: ne.lat, lng: ne.lng }, { lat: ne.lat, lng: sw.lng }]);
+    }
+    const s = MAP.getSize(), kmp = 40075 * Math.cos(center.lat * Math.PI / 180) / Math.pow(2, MAP.getZoom()) / 256;
+    return kmp * s.x * kmp * s.y * 100; // km² → ha
+  } catch (e) { return 0; }
+}
+function bandSignature(R) {
+  const bands = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B12"];
+  return { bands, vals: bands.map((_, i) => 0.05 + R() * 0.35 + (i === 6 ? 0.25 : 0) + (i === 3 ? 0.12 : 0)) };
+}
+function landCoverFractions(R, center) {
+  const f = [0.25 + R() * 0.4, 0.03 + R() * 0.12, 0.2 + R() * 0.45, 0.05 + R() * 0.2];
+  if (center && center.lat > 19 && center.lat < 33 && center.lng > -12 && center.lng < 12) f[2] += 0.5; // Sahara → bare soil
+  if (center && Math.abs(center.lat) > 60) f[3] += 0.3; // high latitudes → cloud/snow
+  const s = f.reduce((a, b) => a + b, 0);
+  return f.map(x => x / s);
+}
+const LC_COLORS = ["#00E5A0", "#00C8FF", "#FFB020", "#8CA0B8"];
 function runAnalysis() {
-  if (!selected) { document.getElementById("anaHint").textContent = t("anaNeed"); return; }
-  document.getElementById("anaHint").textContent = t("anaNote") + " · " + shortName(selected.name);
-  const R = rnd(seedOf(selected.id + selected.date));
+  const tgt = analysisTarget();
+  const R = rnd(seedOf(tgt.key));
+  document.getElementById("anaHint").textContent = t("anaNote") + " · " + tgt.label;
   hist(document.getElementById("cvHist"), R);
-  spectral(document.getElementById("cvSpec"), R);
+  const sig = bandSignature(R);
+  spectral(document.getElementById("cvSpec"), null, sig);
   const vals = Array.from({ length: 200 }, () => R() * 0.9 - 0.1);
   const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
+  const std = Math.sqrt(vals.reduce((a, b) => a + (b - mean) * (b - mean), 0) / vals.length);
+  const c = tgt.center || { lat: 28, lng: 2.5 };
+  const area = analysisAreaHa(c);
+  const lc = landCoverFractions(R, tgt.center || (selected && selected.geojson ? null : c));
+  const lcKeys = ["lcVeg", "lcWat", "lcSoil", "lcCloud"];
   document.getElementById("ndviTbl").innerHTML =
     `<tr><td>${t("anaMean")}</td><td class="mono">${mean.toFixed(3)}</td></tr>
+     <tr><td>${t("anaStd")}</td><td class="mono">${std.toFixed(3)}</td></tr>
      <tr><td>${t("anaMin")}</td><td class="mono">${Math.min(...vals).toFixed(3)}</td></tr>
-     <tr><td>${t("anaMax")}</td><td class="mono">${Math.max(...vals).toFixed(3)}</td></tr>`;
+     <tr><td>${t("anaMax")}</td><td class="mono">${Math.max(...vals).toFixed(3)}</td></tr>
+     <tr><td>${tgt.cloud == null ? t("anaArea") : t("cloudShort")}</td><td class="mono">${tgt.cloud == null ? fmtHa(area) : tgt.cloud + "%"}</td></tr>`;
+  document.getElementById("lcBar").innerHTML = lc.map((f, i) =>
+    `<i style="width:${(f * 100).toFixed(1)}%;background:${LC_COLORS[i]}" title="${esc(t(lcKeys[i]))} ${(f * 100).toFixed(1)}%"></i>`).join("");
+  document.getElementById("lcLegend").innerHTML = lc.map((f, i) =>
+    `<span><i class="dot" style="background:${LC_COLORS[i]}"></i>${esc(t(lcKeys[i]))} <b class="mono">${(f * 100).toFixed(1)}%</b></span>`).join("");
+  lastAnalysis = { label: tgt.label, date: tgt.date, lat: +c.lat.toFixed(4), lng: +c.lng.toFixed(4), areaHa: Math.round(area),
+    mean: +mean.toFixed(4), std: +std.toFixed(4), min: +Math.min(...vals).toFixed(4), max: +Math.max(...vals).toFixed(4),
+    bands: sig.bands, bandVals: sig.vals.map(v => +v.toFixed(4)), lc: lc.map(f => +(f * 100).toFixed(1)) };
+}
+function fmtHa(ha) {
+  if (!ha || ha <= 0) return "—";
+  return ha >= 10000 ? (ha / 10000).toFixed(1) + "k ha" : Math.round(ha).toLocaleString("en-US") + " ha";
+}
+function downloadAnalysisCSV() {
+  if (!lastAnalysis) { toast(t("anaNeed")); return; }
+  const a = lastAnalysis;
+  const L = [["target", a.label], ["date", a.date], ["lat", a.lat], ["lng", a.lng], ["area_ha", a.areaHa],
+    ["ndvi_mean", a.mean], ["ndvi_std", a.std], ["ndvi_min", a.min], ["ndvi_max", a.max],
+    ["lc_veg_pct", a.lc[0]], ["lc_water_pct", a.lc[1]], ["lc_soil_urban_pct", a.lc[2]], ["lc_cloud_pct", a.lc[3]]];
+  a.bands.forEach((b, i) => L.push(["reflectance_" + b, a.bandVals[i]]));
+  const csv = "metric,value\n" + L.map(([k, v]) => `${k},"${String(v).replace(/"/g, "")}"`).join("\n");
+  const u = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  const el = document.createElement("a"); el.href = u; el.download = "kindi-analysis.csv"; el.click();
+  setTimeout(() => URL.revokeObjectURL(u), 2000);
+  toast(t("copied"));
 }
 function setupCanvas(cv) {
   const dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -151,6 +212,8 @@ function setupCanvas(cv) {
 }
 function hist(cv, R) {
   if (!cv) return; const [ctx, w, h] = setupCanvas(cv);
+  ctx.strokeStyle = "rgba(140,160,184,.18)"; ctx.lineWidth = 1;
+  for (let g = 1; g < 4; g++) { const y = 4 + (h - 20) * g / 4; ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke(); }
   const bins = Array.from({ length: 24 }, () => 4 + R() * 40);
   const mx = Math.max(...bins);
   bins.forEach((v, i) => {
@@ -160,12 +223,17 @@ function hist(cv, R) {
     ctx.fillStyle = g; ctx.fillRect(i * (w / 24) + 1, h - 12 - bh, w / 24 - 2, bh);
   });
   ctx.fillStyle = "#8CA0B8"; ctx.font = "10px monospace"; ctx.fillText("DN →", 4, h - 1);
+  ctx.fillText("n=" + Math.round(mx), w - 44, 11);
 }
-function spectral(cv, R) {
+function spectral(cv, R, pre) {
   if (!cv) return; const [ctx, w, h] = setupCanvas(cv);
-  const bands = ["B02", "B03", "B04", "B05", "B06", "B07", "B08", "B12"];
-  const vals = bands.map((_, i) => 0.05 + R() * 0.35 + (i === 6 ? 0.25 : 0) + (i === 3 ? 0.12 : 0));
-  ctx.strokeStyle = "#8CA0B8"; ctx.beginPath(); ctx.moveTo(24, 4); ctx.lineTo(24, h - 16); ctx.lineTo(w - 4, h - 16); ctx.stroke();
+  const { bands, vals } = pre || bandSignature(R);
+  ctx.strokeStyle = "rgba(140,160,184,.35)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(24, 4); ctx.lineTo(24, h - 16); ctx.lineTo(w - 4, h - 16); ctx.stroke();
+  ctx.strokeStyle = "rgba(140,160,184,.15)";
+  [0.25, 0.5, 0.75].forEach(f => { const y = 4 + (h - 24) * (1 - f); ctx.beginPath(); ctx.moveTo(24, y); ctx.lineTo(w - 4, y); ctx.stroke(); });
+  ctx.fillStyle = "#8CA0B8"; ctx.font = "9px monospace";
+  ctx.fillText("ρ", 4, 14);
   ctx.beginPath();
   vals.forEach((v, i) => { const x = 28 + i * ((w - 36) / 7), y = (h - 20) - v * (h - 30); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
   ctx.strokeStyle = "#00C8FF"; ctx.lineWidth = 2; ctx.stroke();
@@ -294,5 +362,5 @@ window.addEventListener("DOMContentLoaded", () => {
   switchTab("search");
   refreshStatus();
   document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".modal.open").forEach(m => m.classList.remove("open")); });
-  window.addEventListener("resize", () => { if (selected) runAnalysis(); });
+  window.addEventListener("resize", () => { if (lastAnalysis) runAnalysis(); });
 });
